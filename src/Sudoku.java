@@ -27,7 +27,7 @@ public class Sudoku {
 		
 		List<Integer> removedSpots = new ArrayList<>();
 		
-		while( init(EASY, removedSpots) == false);
+		while( init(EASY) == false);
 		//print board
 		
 		new GUI(m, uniqueCheck);
@@ -142,11 +142,11 @@ public class Sudoku {
 //		System.out.println(list.toString());
 		
 		new GUI(m, uniqueCheck);
-		solve(0, difficulty);
+		solve(arr[index], difficulty);
 		
 
 		if(uniqueCheck.size() > 1) {
-			list.remove(list.size()-1);
+			solvedM.remove(arr[index]);
 			uniqueCheck = new ArrayList<>();
 			m[y][x] = temp;
 			row[y][temp] = 1;
@@ -156,18 +156,17 @@ public class Sudoku {
 		}
 		
 		new GUI(m, uniqueCheck);
-		System.out.println(list.toString());
+//		System.out.println(list.toString());
 
 		int counter = 1;
 		
 		while(index + counter < 81) {
-			if(findUniqueSol(arr, difficulty, list, index + counter) )return true;
-			System.out.println(list.toString());
+			if(findUniqueSol(arr, difficulty, index + counter) )return true;
+//			System.out.println(list.toString());
 			counter++;
 		} 
-
-		list.remove(list.size()-1);
-		System.out.println(list.toString());
+		solvedM.remove(arr[index]);
+//		System.out.println(list.toString());
 
 		return false;
 	}
@@ -176,6 +175,7 @@ public class Sudoku {
 		if(i == difficulty && solvedM.size() == difficulty) {
 			List<Integer> keyList = new ArrayList(solvedM.keySet());
 		    List<Integer> valueList = new ArrayList(solvedM.values());
+		    
 		    int[][] map = new int[32][2];
 		    for(int index = 0; i<32; i++) {
 		    	map[index][0] = keyList.get(index);
@@ -187,7 +187,7 @@ public class Sudoku {
 		}
 		
 		
-		int position = list.get(i);
+		int position = solvedM.get(i);
 		int y = position/9;
 		int x = position - y*9; 
 		for(int value=1; value<10; value++) {
