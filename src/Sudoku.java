@@ -30,7 +30,7 @@ public class Sudoku {
 		while( init(EASY, removedSpots) == false);
 		//print board
 		
-		new GUI(m, solvedM, removedSpots);
+		new GUI(m, uniqueCheck);
 		
 	}
 	private static void mergeSolvedMToM() {
@@ -41,7 +41,7 @@ public class Sudoku {
 			}
 		}
 	}
-	private static boolean init(int difficulty, List<Integer> removedSpots) throws FileNotFoundException {
+	private static boolean init(int difficulty) throws FileNotFoundException {
 		int[] array = new int[81];
 		for(int i=0; i<81; i++) {
 			array[i] = i;
@@ -67,7 +67,7 @@ public class Sudoku {
 //		System.setOut(console);
 		int counter = 0;
 		while(counter < 81 - 66) {
-			if(findUniqueSol(array, difficulty, removedSpots, counter)) return true;
+			if(findUniqueSol(array, difficulty, counter)) return true;
 			counter++;
 		}
 		
@@ -119,47 +119,16 @@ public class Sudoku {
 		}
 		
 		
-//		for(int index=0; index<81; index++) {
-//			if(array[index] == 0) continue;
-//			int i = array[index]/9;
-//			int j = array[index] - i*9;
-//			int value = random.nextInt(9) + 1;
-//			System.out.println(i + " " + j);
-//
-//			while(row[i][value] == 1 || col[j][value] == 1 || box[i/3][j/3][value] == 1)
-//			{	
-//				value = random.nextInt(9) + 1;
-//				
-//			}
-//
-//			
-//			row[i][value] = 1;
-//			col[j][value] = 1;
-//			box[i/3][j/3][value] = 1;
-//			
-//			m[i][j] = value;
-//			
-//			System.out.println(counter);
-//			for(int c=0; c<9; c++) {
-//				System.out.println(Arrays.toString(m[c]));
-//
-//			}
-//			
-//			System.out.println();
-//			counter++;
-//
-//		}
-		
 		return list;
 	}
-	private static boolean findUniqueSol(int[] arr, int difficulty, List<Integer> list, int index) {
+	private static boolean findUniqueSol(int[] arr, int difficulty, int index) {
 		System.out.println("Index " + index);
 
-		if(index >= 81 && list.size() < difficulty) return false;
+		if(index >= 81 && solvedM.size() < difficulty) return false;
 		
-		else if(list.size() == difficulty) return true;
+		else if(solvedM.size() == difficulty) return true;
 
-		list.add(arr[index]);
+		solvedM.put(arr[index], 0);
 		
 		int y = arr[index]/9;
 		int x = arr[index] - y*9;
@@ -170,10 +139,10 @@ public class Sudoku {
 		col[x][temp] = 0;
 		box[y/3][x/3][temp] = 0;
 		
-		System.out.println(list.toString());
+//		System.out.println(list.toString());
 		
-		new GUI(m, solvedM, list);
-		solve(list, 0, difficulty);
+		new GUI(m, uniqueCheck);
+		solve(0, difficulty);
 		
 
 		if(uniqueCheck.size() > 1) {
@@ -186,7 +155,7 @@ public class Sudoku {
 			return false;
 		}
 		
-		new GUI(m, solvedM, list);
+		new GUI(m, uniqueCheck);
 		System.out.println(list.toString());
 
 		int counter = 1;
@@ -203,7 +172,7 @@ public class Sudoku {
 		return false;
 	}
 
-	private static void solve(List<Integer> list,  int i, int difficulty) {
+	private static void solve(int i, int difficulty) {
 		if(i == difficulty && solvedM.size() == difficulty) {
 			List<Integer> keyList = new ArrayList(solvedM.keySet());
 		    List<Integer> valueList = new ArrayList(solvedM.values());
@@ -211,7 +180,7 @@ public class Sudoku {
 		    for(int index = 0; i<32; i++) {
 		    	map[index][0] = keyList.get(index);
 		    	map[index][1] = valueList.get(index);
-		    }
+		    } 
 		    
 		    uniqueCheck.add(map);
 			return;
