@@ -54,14 +54,14 @@ public class GUI implements ActionListener{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 797, 497);
+		frame.setSize(600, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel[][] panels = new JPanel[3][3];
 		textFields = new JTextField[3][3][3][3];
 		board = new JPanel(new GridLayout(3, 3, 3, 3));
-		board.setBounds(10, 10, 300, 243);
+		board.setBounds(10, 10,  439, 439);
 		
 		for(int i=0; i<9; i++) {
 			int y = i/3;
@@ -91,15 +91,15 @@ public class GUI implements ActionListener{
 		frame.getContentPane().add(board);
 		
 		easy = new JRadioButton("Easy");
-		easy.setBounds(316, 20, 103, 21);
+		easy.setBounds(455, 17, 109, 23);
 		frame.getContentPane().add(easy);
 		
 		med = new JRadioButton("Medium");
-		med.setBounds(316, 43, 103, 21);
+		med.setBounds(455, 43, 109, 23);
 		frame.getContentPane().add(med);
 		
 		hard = new JRadioButton("Hard");
-		hard.setBounds(316, 66, 103, 21);
+		hard.setBounds(455, 69, 109, 23);
 		frame.getContentPane().add(hard);
 		
 		ButtonGroup bg = new ButtonGroup(); 
@@ -107,20 +107,24 @@ public class GUI implements ActionListener{
 		easy.addActionListener(this);
 		med.addActionListener(this);
 		hard.addActionListener(this);
+		bg.add(easy);
+		bg.add(med);
+		bg.add(hard);
 		
 		JButton solve = new JButton("Solve");
-		solve.setBounds(320, 116, 115, 21);
+		solve.setBounds(465, 99, 89, 23);
 		solve.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(gameState == 1) {
-					removedSpots = Sudoku.removedSpots;
-					row = Sudoku.row;
-					col = Sudoku.col;
-					box = Sudoku.box;
+					removedSpots = game.removedSpots;
+					row = game.row;
+					col = game.col;
+					box = game.box;
 					gameState = 0;
 					solve(removedSpots, 0);
+					
 				}
 				
 			}
@@ -132,20 +136,18 @@ public class GUI implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        
-    	
         if(easy.isSelected()) {
         	 game = new Sudoku(32);
         	 fillBoard(game.getM());
         	 gameState = 1;
         }
         else if(med.isSelected()) {
-        	game = new Sudoku(30);
+        	game = new Sudoku(34);
        		fillBoard(game.getM());
        		gameState = 1;
         }
         else {
-        	game = new Sudoku(28);
+        	game = new Sudoku(36);
        	 	fillBoard(game.getM());
        	 	gameState = 1;
         }
@@ -157,12 +159,14 @@ public class GUI implements ActionListener{
 			for(int j=0; j<9; j++) {
 				JTextField temp = textFields[i/3][j/3][i%3][j%3];
 				temp.setEditable(true);
+				temp.setText("");
 				if(m[i][j] != 0) {
 					temp.setText(String.valueOf(m[i][j]));
 					temp.setHorizontalAlignment(JTextField.CENTER);
 					temp.setEditable(false);
 				}
 				else {
+					
 					((AbstractDocument)temp.getDocument()).setDocumentFilter(new DocumentFilter(){
 				        Pattern regEx = Pattern.compile("\\d*");
 				       
@@ -210,5 +214,4 @@ public class GUI implements ActionListener{
 		}	
 		return false;
 	}
-	
 }

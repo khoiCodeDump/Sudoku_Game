@@ -6,23 +6,20 @@ import java.util.Random;
 
 
 public class Sudoku {
-	static int EASY = 32;
-	int MEDIUM = 30;
-	int HARD = 28;
 	
-	static int[][] m = new int[9][9];
-	static int[][] row = new int[9][10];
-	static int[][] col = new int[9][10];
-	static int[][][] box = new int[3][3][10];
-	static List<Integer> removedSpots = new ArrayList<>();
-	static List<Integer> solutionList = new ArrayList<>();
-	static int uniqueCheck = 0;
-	static int[][] matrix = new int[9][9];
-	static int[] ans;
-	static int[][] solvedM;
+	
+	int[][] m = new int[9][9];
+	int[][] row = new int[9][10];
+	int[][] col = new int[9][10];
+	int[][][] box = new int[3][3][10];
+	List<Integer> removedSpots = new ArrayList<>();
+	List<Integer> solutionList = new ArrayList<>();
+	int uniqueCheck = 0;
+	int[][] matrix = new int[9][9];
+	int[] ans;
+	int[][] solvedM;
 	
 	Sudoku(int difficulty) {
-		
 		while(init(difficulty) == false);
 		
 	}
@@ -30,7 +27,7 @@ public class Sudoku {
 		return m;
 	}
 
-	private static void mergeSolvedMToM() {
+	private void mergeSolvedMToM() {
 		for(int i=0; i<m.length; i++) {
 			for(int j=0; j<m[0].length; j++) {
 				m[i][j] = matrix[i][j] + m[i][j];
@@ -38,7 +35,7 @@ public class Sudoku {
 			}
 		}
 	}
-	private static boolean init(int difficulty){
+	private  boolean init(int difficulty){
 		ans = new int[difficulty];
 		solvedM = new int[9][9];
 		int[] array = new int[81];
@@ -57,7 +54,7 @@ public class Sudoku {
 		fillRemaining(toExplore, 0);
 		
 		mergeSolvedMToM();
-//		PrintStream o = new PrintStream(new File("array.txt"));
+//		PrintStream o = new PrintStream(new File("all_combinations.txt"));
 
 //	    PrintStream console = System.out;
 
@@ -72,7 +69,7 @@ public class Sudoku {
 		
 		return false;
 	}
-	private static List<Integer> fillDiagonal() {
+	private  List<Integer> fillDiagonal() {
 		
 		int[] array = new int[81];
 		for(int i=0; i<81; i++) {
@@ -120,7 +117,7 @@ public class Sudoku {
 		
 		return list;
 	}
-	private static boolean findUniqueSol(int[] arr, int difficulty, int index) {
+	private  boolean findUniqueSol(int[] arr, int difficulty, int index) {
 		if(index >= 81 && removedSpots.size() < difficulty) return false;
 
 		removedSpots.add(arr[index]);
@@ -167,7 +164,7 @@ public class Sudoku {
 		return false;
 	}
 
-	private static boolean solve(int i) {
+	private  boolean solve(int i) {
 		if(removedSpots.size() == solutionList.size()) {
 			System.out.println(removedSpots);
 			for(int c=0; c<9; c++) {
@@ -212,7 +209,7 @@ public class Sudoku {
 		
 		return false;
 	}
-	private static boolean fillRemaining(List<Integer> list,  int i) {
+	private  boolean fillRemaining(List<Integer> list,  int i) {
 		if(i >= list.size()) {
 			return true;
 		}
