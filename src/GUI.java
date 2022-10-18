@@ -19,13 +19,14 @@ public class GUI implements ActionListener{
 	JTextField[][][][] textFields;
 	JPanel board;
 	Sudoku game;
-	int gameState;
 	int[][] row;
 	int[][] col;
 	int[][][] box;
 	List<Integer> removedSpots;
+	JButton check, solve, replay;
+	JLabel status;
 	/**
-	 * Create the application.
+	 * Author Khoi Vu
 	 */
 	public GUI() {
 		initialize();
@@ -55,6 +56,7 @@ public class GUI implements ActionListener{
 	private void initialize() {
 		frame = new JFrame();
 		frame.setSize(600, 500);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -111,45 +113,136 @@ public class GUI implements ActionListener{
 		bg.add(med);
 		bg.add(hard);
 		
-		JButton solve = new JButton("Solve");
+		solve = new JButton("Solve");
 		solve.setBounds(465, 99, 89, 23);
+		
+		check = new JButton("Check");
+		check.setBounds(465, 130, 89, 23);
+		
+		replay = new JButton("Replay difficulty");
+		replay.setBounds(465, 350, 89, 23);
 		solve.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(gameState == 1) {
+				
 					removedSpots = game.removedSpots;
 					row = game.row;
 					col = game.col;
 					box = game.box;
-					gameState = 0;
+					check.setVisible(false);
+					solve.setVisible(false);
 					solve(removedSpots, 0);
-					
-				}
+					status.setText("Game solved!");
+					replay.setVisible(true);
+				
 				
 			}
 			
 		});
+		
+		check.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				removedSpots = game.removedSpots;
+				row = game.row;
+				col = game.col;
+				box = game.box;
+				for(int i=0; i<removedSpots.size(); i++) {
+					int position = removedSpots.get(i);
+					int y = position/9;
+					int x = position - y*9; 
+					String text = textFields[y/3][x/3][y%3][x%3].getText();
+					if(text.equals("") || text == null) {
+						status.setText("Please fill in all spots");
+						return;
+					}
+					int value = Integer.valueOf(text);
+					if( row[y][value] == 1 || col[x][value] == 1 || box[y/3][x/3][value] == 1) {
+						return;
+					}
+					
+				}
+				
+				status.setText("You win!");
+				solve.setVisible(false);
+				check.setVisible(false);
+				replay.setVisible(true);
+			}
+			
+		});
+		
+		replay.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				replay.setVisible(false);
+				status.setText("Generating board...");
+				
+				if(easy.isSelected()) {
+		        	game = new Sudoku(32);
+		        	fillBoard(game.getM());
+					status.setText("Game start");
+
+		        }
+		        else if(med.isSelected()) {
+		        	game = new Sudoku(34);
+		       		fillBoard(game.getM());
+					status.setText("Game start");
+
+		        }
+		        else {
+		        	game = new Sudoku(36);
+		       	 	fillBoard(game.getM());
+					status.setText("Game start");
+
+		        }
+			}
+			
+		});
+		
 		frame.getContentPane().add(solve);
+		frame.getContentPane().add(check);
+		frame.getContentPane().add(replay);
+		replay.setVisible(false);
+
+		status = new JLabel("");
+		status.setHorizontalAlignment(SwingConstants.CENTER);
+		status.setBounds(465, 160, 89, 23);
+		status.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		frame.getContentPane().add(status);
+		
 		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        if(easy.isSelected()) {
-        	 game = new Sudoku(32);
-        	 fillBoard(game.getM());
-        	 gameState = 1;
+		check.setVisible(true);
+		solve.setVisible(true);
+		replay.setVisible(false);
+		status.setText("Generating board...");
+		
+		if(easy.isSelected()) {
+        	game = new Sudoku(32);
+        	fillBoard(game.getM());
+			status.setText("Game start");
+
         }
         else if(med.isSelected()) {
         	game = new Sudoku(34);
        		fillBoard(game.getM());
-       		gameState = 1;
+			status.setText("Game start");
+
         }
         else {
         	game = new Sudoku(36);
        	 	fillBoard(game.getM());
-       	 	gameState = 1;
+			status.setText("Game start");
+
         }
 		
 	}
