@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -174,6 +173,12 @@ public class GUI implements ActionListener{
 			
 		});
 		
+		status = new JLabel("");
+		status.setHorizontalAlignment(SwingConstants.CENTER);
+		status.setBounds(465, 160, 200, 23);
+		status.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		frame.getContentPane().add(status);
+		
 		Data data = new Data(status);
 		Thread loading = new Thread(new LoadingLevel(data));
 		loading.start();
@@ -216,14 +221,6 @@ public class GUI implements ActionListener{
 		frame.getContentPane().add(replay);
 		replay.setVisible(false);
 
-		status = new JLabel("");
-		status.setHorizontalAlignment(SwingConstants.CENTER);
-		status.setBounds(465, 160, 200, 23);
-		status.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		frame.getContentPane().add(status);
-		
-		
 	}
 	
 	@Override
@@ -294,7 +291,7 @@ public class GUI implements ActionListener{
 		if(index == removedSpots.size()) return true;
 		int position = removedSpots.get(index);
 		int y = position/9;
-		int x = position - y*9; 
+		int x = position - y*9;
 		for(int value=1; value<10; value++) {
 			if( row[y][value] == 0 && col[x][value] == 0 && box[y/3][x/3][value] == 0) {
 				
