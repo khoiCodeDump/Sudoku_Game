@@ -228,7 +228,7 @@ public class GUI implements ActionListener{
 		check.setVisible(true);
 		solve.setVisible(true);
 		replay.setVisible(false);
-		boolean done = false;
+
 		
 		if(easy.isSelected()) {
 			game = new Sudoku(32);
